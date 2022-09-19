@@ -1,0 +1,12 @@
+What is WhatsApp ?
+
+WhatsApp is a real time chat application
+
+
+NodeJS and SOcket.
+
+
+Client  <----->   Data  <---> Server
+
+1. HTTP
+2. SOCKET (Realtime )
