@@ -7,11 +7,36 @@
 	<title>Whatsapp</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="http://localhost:5000/style.css">
 </head>
 
 <body>
-	
+	<div class="modal" id="myModal">
+		<div class="modal-dialog">
+		  <div class="modal-content">
+	  
+			<!-- Modal Header -->
+			<div class="modal-header">
+			  <h4 class="modal-title">Please Enter your name</h4>
+			  <button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+	  
+			<!-- Modal body -->
+			<div class="modal-body">
+			  <form class="myForm">
+					<input type="text" class="form-control myinput" />
+					<input type="button" class="btn btn-success mybtn" value="Save"  />
+			  </form>
+			</div>
+	  
+			<!-- Modal footer -->
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+	  
+		  </div>
+		</div>
+	</div>
 	<div class="container-fluid" id="main-container">
 		<div class="row h-100">
 			<div class="col-12 col-sm-5 col-md-4 d-flex flex-column" id="chat-list-area" style="position:relative;">
@@ -100,9 +125,32 @@
 	    crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
 		crossorigin="anonymous"></script>
-	<script src="datastore.js"></script>
-	<script src="date-utils.js"></script>
-	<script src="script.js"></script>
+	<script src="http://localhost:5000/datastore.js"></script>
+	<script src="http://localhost:5000/date-utils.js"></script>
+	<script src="http://localhost:5000/script.js"></script>
+	<script>
+
+		var loggedin = localStorage.getItem('loggedin');
+		var name = localStorage.getItem('name');
+		if(loggedin !== 'true' ||  name === '' ){
+			$("#myModal").modal()
+		}else{
+			document.querySelector('#username').innerHTML =name;
+		}
+
+		document.querySelector('input.mybtn').addEventListener('click', ()=>{
+			var myinput = document.querySelector('input.myinput').value;
+
+			if(myinput !== ''){
+				localStorage.setItem('name',myinput)
+				console.log(myinput);
+				
+				
+			}
+
+		});
+
+	</script>
 </body>
 
 </html>

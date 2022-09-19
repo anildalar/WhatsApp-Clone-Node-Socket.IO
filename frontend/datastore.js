@@ -1,8 +1,8 @@
 
 let user = {
 	id: 0,
-	name: "Anish",
-	number: "+91 91231 40293",
+	name: "",
+	number: "",
 	pic: "images/asdsd12f34ASd231.png"
 };
 
