@@ -1,13 +1,15 @@
 const express = require('express')
 const app = express();
 const env = require('dotenv');
-const { myRoute } = require('./routes/myRoute');
 env.config();
 
+const { myRoute } = require('./routes/myRoute');
+const { registerRoute } = require('./routes/authRoute');
 
 //Lets create the first route
 
 app.use(myRoute);
+app.use('/api',registerRoute);
 app.use(express.static('frontend'))
 
 

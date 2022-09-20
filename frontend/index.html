@@ -25,7 +25,7 @@
 			<div class="modal-body">
 			  <form class="myForm">
 					<input type="text" class="form-control myinput" />
-					<input type="button" class="btn btn-success mybtn" value="Save"  />
+					<input type="submit" class="btn btn-success mybtn" value="Save"  />
 			  </form>
 			</div>
 	  
@@ -83,6 +83,14 @@
 					</div>
 					
 				</div>
+				<div class="row">
+					<div class="col">
+						<button class="btn btn-primary btn-sm mt-1 loginbtn">Login</button>
+					</div>
+					<div class="col">
+						<button class="btn btn-success btn-sm mt-1 registerbtn">Register</button>
+					</div>
+				</div>
 			</div>
 
 			<!-- Message Area -->
@@ -129,6 +137,7 @@
 	<script src="/js/date-utils.js"></script>
 	<script src="/js/script.js"></script>
 	<script>
+		let baseUrl = 'http://localhost:5000';
 
 		var loggedin = localStorage.getItem('loggedin');
 		var name = localStorage.getItem('name');
@@ -150,6 +159,115 @@
 			}
 
 		});
+
+	</script>
+	<script>
+		document.querySelector('.registerbtn').addEventListener('click', ()=>{
+			var element = document.querySelector('#myModal .myForm');
+			element.classList.remove('loginform');
+			element.classList.add('registerform');
+			console.log(element)
+
+			element.innerHTML = `
+					<div class="form-group">
+						<label for="fname">FirstName</label>
+						<input type="text" class="form-control" id="fname" name="fname" aria-describedby="fname" placeholder="Enter name">
+						<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Email address</label>
+						<input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+						<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+					</div>
+					<div class="form-group">
+						<label for="cpassword">Confirm Password</label>
+						<input type="password" class="form-control" id="cpassword" name="cpassword" placeholder="Confirm Password">
+					</div>
+					<button type="submit" class="btn btn-primary">Submit</button>
+			`;
+
+			document.querySelector('.modal-title').innerHTML = 'Registration Form';
+			
+			document.querySelector('form.registerform').addEventListener('submit',(e)=>{ // e = event
+				e.preventDefault();
+				console.log('Register');
+
+
+				var fname = document.querySelector('input[name="fname"]').value;
+				var email = document.querySelector('input[name="email"]').value;
+				var pwd = document.querySelector('input[name="password"]').value;
+				var cpwd = document.querySelector('input[name="cpassword"]').value;
+
+				var d = {fname,email,pwd,cpwd};
+
+				console.log(d);
+
+				
+				if(pwd === cpwd){
+					fetch(baseUrl+`/api/register`,{
+						method: 'POST',
+						body: JSON.stringify(d),
+						headers: {
+							'Content-Type': 'application/json'
+						},
+					})
+					.then(d=>{
+						console.log('Register response')
+					})
+					.catch(e=>{
+						console.log('error ',e)
+					});
+				}else{
+					alert("Password and Confirm password does not match!!");
+				}
+				
+				
+			})		
+			
+			$("#myModal").modal();
+
+		});
+
+		document.querySelector('.loginbtn').addEventListener('click', ()=>{
+			var element = document.querySelector('#myModal .myForm');
+			element.classList.remove('registerform');
+			element.classList.add('loginform');
+			console.log(element)
+
+			element.innerHTML = `
+					<div class="form-group">
+						<label for="exampleInputEmail1">Email address</label>
+						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+						<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">Password</label>
+						<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+					</div>
+					<button type="submit" class="btn btn-primary">Submit</button>
+			`;
+
+			document.querySelector('.modal-title').innerHTML = 'Login Form';
+			
+			document.querySelector('form.loginform').addEventListener('submit',(e)=>{ // e = event
+				e.preventDefault();
+				//console.log('login');
+
+				//Call the api
+			})	
+			
+			$("#myModal").modal();
+
+		});
+
+
+		
+		
+
 
 	</script>
 </body>
