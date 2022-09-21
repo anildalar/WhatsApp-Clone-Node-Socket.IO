@@ -215,8 +215,14 @@
 							'Content-Type': 'application/json'
 						},
 					})
+					.then(res=>res.json())
 					.then(d=>{
-						console.log('Register response')
+						console.log('Register response'+d.msg);
+						if(d.msg === 'Saved'){
+							alert(d.msg);
+						}else{
+							alert(d.msg);
+						}
 					})
 					.catch(e=>{
 						console.log('error ',e)

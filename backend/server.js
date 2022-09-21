@@ -8,6 +8,9 @@ const { registerRoute } = require('./routes/authRoute');
 
 //Lets create the first route
 
+//If you want to recive json payload
+app.use(express.json())
+
 app.use(myRoute);
 app.use('/api',registerRoute);
 app.use(express.static('frontend'))
