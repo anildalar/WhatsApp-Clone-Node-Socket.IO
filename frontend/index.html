@@ -133,11 +133,14 @@
 	    crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
 		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.min.js" integrity="sha512-xzC4RSo+4m1clLhr0pQr6yFjO9bJ0py6+l65SBibI8/pSEU8U4iVZ7xm95WRq8PXw2MKv8SSR3QkqR2jciG5Ug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="/js/datastore.js"></script>
 	<script src="/js/date-utils.js"></script>
 	<script src="/js/script.js"></script>
 	<script>
 		let baseUrl = 'http://localhost:5000';
+		// plain object
+		
 
 		var loggedin = localStorage.getItem('loggedin');
 		var name = localStorage.getItem('name');
@@ -220,6 +223,9 @@
 						console.log('Register response'+d.msg);
 						if(d.msg === 'Saved'){
 							alert(d.msg);
+
+							$("#myModal").modal('hide');
+							document.querySelector('button.btn.btn-success').remove();
 						}else{
 							alert(d.msg);
 						}
@@ -235,14 +241,88 @@
 			})		
 			
 			$("#myModal").modal();
-
+			common();
 		});
 
+		function common(){
+			document.querySelector('form.loginform').addEventListener('submit',(e)=>{
+				e.preventDefault();
+	
+				console.log('Logged in');
+
+				var email = document.querySelector('form.loginform input[type="email"]').value;
+				var password = document.querySelector('form.loginform input[type="password"]').value;
+				
+				console.log('email',email);
+				console.log('password',password);
+
+				var d = {
+					email:email,
+					password:password
+				}
+
+				if(email !== '' && password !== ''){
+					//API Call
+					//alert('ok');
+					try {
+						//Block of code to try
+						fetch(baseUrl+`/api/login`,{
+							method: 'POST',
+							body: JSON.stringify(d),
+							headers: {
+								'Content-Type': 'application/json'
+							},
+						})
+						.then(res=>{
+							console.log(res.status);
+							//res.status = res.status;
+							if(res.status === 200){
+								alert('WElcome');
+								$("#myModal").modal('hide');
+							}
+							if(res.status === 403){
+								alert('Invalid Credentials');
+							}
+							return res.json();
+						})
+						.then(d=>{
+						
+							
+							
+							console.log('d',d)
+
+							if(d.token){
+								localStorage.setItem('token',d.token);
+								const socket = io({
+									auth: {
+										token: localStorage.getItem('token')
+									}
+								});
+							}
+						})
+						.catch(e=>{
+							console.log('e',e)
+						});
+					}
+					  catch(err) {
+						//Block of code to handle errors
+					}
+
+				}else{
+					alert('Email and Passwrod are compulsory');
+				}
+	
+			})
+		}
+		
+		
+
 		document.querySelector('.loginbtn').addEventListener('click', ()=>{
+			console.log('Clicked');
 			var element = document.querySelector('#myModal .myForm');
 			element.classList.remove('registerform');
 			element.classList.add('loginform');
-			console.log(element)
+			console.log(element);
 
 			element.innerHTML = `
 					<div class="form-group">
@@ -267,7 +347,7 @@
 			})	
 			
 			$("#myModal").modal();
-
+			common();
 		});
 
 
